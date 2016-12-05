@@ -148,6 +148,7 @@ class NotSupportedError(Exception):
     """Raised for operations that are not supported on a given object."""
     pass
 
+
 def _trailing(template, *targets):
     """Substring of *template* following all *targets*.
 
@@ -1817,6 +1818,7 @@ class StoragePasswords(Collection):
             response = self.post(password=password, name=username)
         else:
             response = self.post(password=password, realm=realm, name=username)
+
         if response.status != 201:
             raise ValueError("Unexpected status code %s returned from creating a stanza" % response.status)
 
