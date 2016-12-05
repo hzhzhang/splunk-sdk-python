@@ -1862,8 +1862,9 @@ class StoragePasswords(Collection):
         The identifier can be passed in through the username parameter as
         <username> or <realm>:<username>, but the preferred way is by
         passing in the username and realm parameters.
-        :type name: ``string``
+
         :param password: The password for the credentials - this is the only part of the credentials that will be stored securely.
+        :type name: ``string``
         :param username: The username for the credentials, or <realm>:<username> if the realm parameter is omitted.
         :type name: ``string``
         :param realm: The credential realm. (optional)
