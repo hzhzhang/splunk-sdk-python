@@ -1857,12 +1857,18 @@ class StoragePasswords(Collection):
         return Collection.delete(self, name)
 
     def update(self, password, username, realm=None):
-        """
+        """Update a storage password.
 
-        :param password:
-        :param username:
-        :param realm:
-        :return:
+        The identifier can be passed in through the username parameter as
+        <username> or <realm>:<username>, but the preferred way is by
+        passing in the username and realm parameters.
+
+        :param username: The username for the credentials, or <realm>:<username> if the realm parameter is omitted.
+        :type name: ``string``
+        :param realm: The credential realm. (optional)
+        :type name: ``string``
+        :return: The `StoragePassword` collection.
+        :rtype: ``self``
         """
         if realm is None:
             # This case makes the username optional, so
