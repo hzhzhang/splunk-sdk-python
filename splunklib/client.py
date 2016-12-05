@@ -148,7 +148,6 @@ class NotSupportedError(Exception):
     """Raised for operations that are not supported on a given object."""
     pass
 
-
 def _trailing(template, *targets):
     """Substring of *template* following all *targets*.
 
@@ -1818,7 +1817,6 @@ class StoragePasswords(Collection):
             response = self.post(password=password, name=username)
         else:
             response = self.post(password=password, realm=realm, name=username)
-
         if response.status != 201:
             raise ValueError("Unexpected status code %s returned from creating a stanza" % response.status)
 
@@ -1855,6 +1853,36 @@ class StoragePasswords(Collection):
         if name[-1] is not ":":
             name = name + ":"
         return Collection.delete(self, name)
+
+    def update(self, password, username, realm=None):
+        """
+
+        :param password:
+        :param username:
+        :param realm:
+        :return:
+        """
+        if realm is None:
+            # This case makes the username optional, so
+            # the full name can be passed in as realm.
+            # Assume it's already encoded.
+            name = username
+        else:
+            # Encode each component separately
+            name = UrlEncoded(realm, encode_slash=True) + ":" + UrlEncoded(username, encode_slash=True)
+        # Insert the : expected at the beginning of the name
+        if name[0] is not ":":
+            name = ":" + name
+        # Append the : expected at the end of the name
+        if name[-1] is not ":":
+            name = name + ":"
+        response = self.post(path_segment=name, password=password)
+        if response.status != 200:
+            raise ValueError("Unexpected status code %s returned from updating a stanza" % response.status)
+        entries = _load_atom_entries(response)
+        state = _parse_atom_entry(entries[0])
+        storage_password = StoragePassword(self.service, self._entity_path(state), state=state, skip_refresh=True)
+        return storage_password
 
 
 class AlertGroup(Entity):
